@@ -1,0 +1,53 @@
+Demo setup for CC4IoT final project presentation
+names:
+    bucket = cc4iotdemobucket
+    topic = demotopic
+    role = demorole
+    lambda = demofunction
+
+
+
+SNS Access Policy
+{
+    "Version": "2012-10-17",
+    "Id": "SNSAccessPolicy",
+    "Statement": [
+      {
+        "Sid": "SNSAccessPolicyStatement",
+        "Effect": "Allow",
+        "Principal": {
+          "Service": "s3.amazonaws.com"
+        },
+        "Action": "SNS:Publish",
+        "Resource": "arn:aws:sns:us-east-2:241593296063:demotopic",
+        "Condition": {
+          "StringEquals": {
+            "aws:SourceAccount": "241593296063"
+          },
+          "ArnLike": {
+            "aws:SourceArn": "arn:aws:s3:*:*:cc4iotdemobucket"
+          }
+        }
+      }
+    ]
+  }
+
+
+  
+
+  S3 Bucket Policy
+  {
+    "Version": "2012-10-17",
+    "Id": "LambdaPolicy",
+    "Statement": [
+        {
+            "Sid": "BucketPolicyStatement",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::241593296063:role/demorole"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::cc4iotdemobucket/*"
+        }
+    ]
+}
